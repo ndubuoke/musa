@@ -1,4 +1,4 @@
-name: build-tenant-dev
+name: Build Docker Image
 
 on:
   push:
@@ -7,20 +7,23 @@ on:
 
 jobs:
   build:
+    name: Build Docker Image
     runs-on: macos-latest
+
     steps:
-      - name: Install Docker
+      # Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Log in to Docker Hub (if needed)
+      # Uncomment the below lines if you need to push the image to Docker Hub
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build the Docker image
+      - name: Build Docker Image
         run: |
-          brew install docker
-          brew install colima
-          colima start
-      - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-      - name: Install dependencies
-        run: |
-          cd tenant
-          pwd
-          ls
+          docker build -t my-docker-image:latest .
