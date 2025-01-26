@@ -1,0 +1,15 @@
+name: Build Docker Image on Linux
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+ build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd auth
+          docker buildx build --platform linux/arm64  -t determinas/auth
