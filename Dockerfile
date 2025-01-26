@@ -1,12 +1,13 @@
 FROM node:alpine
 
+# Set a working directory (optional)
 WORKDIR /app
 
-ARG PUPPETEER_SKIP_DOWNLOAD=true
+# Install some basic utilities (e.g., curl, bash, etc.)
+RUN apk add --no-cache bash curl nano
 
-RUN npm install -g npm@latest
-RUN npm install
+# Set environment variables (optional)
+ENV APP_ENV=production
 
-COPY . .
-
-CMD ["npm", "start"]
+# Default command to run in the container
+CMD ["sh", "-c", "echo 'Hello from Docker!'; exec sh"]
