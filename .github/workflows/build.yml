@@ -3,10 +3,7 @@ name: Build Docker Image on macOS
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - dev
 
 jobs:
   build:
