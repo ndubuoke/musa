@@ -1,4 +1,4 @@
-name: Build and Verify Docker Image for ARM64
+name: Build and Verify Docker Image for Multi-Platform
 
 on:
   push:
@@ -22,24 +22,25 @@ jobs:
         run: |
           echo "dckr_pat_P-jkYF-QC9HWMmHVL39dBmKIbg0" | docker login -u "ndubuoke" --password-stdin
 
-      # Build and push the Docker image for ARM64
-      - name: Build and Push Docker Image for ARM64
+      # Build and push the Docker image for multiple platforms
+      - name: Build and Push Docker Image for Multiple Platforms
         run: |
           docker buildx build \
-            --platform linux/arm64 \
-            --tag ndubuoke/auth:arm64 \
+            --platform linux/amd64,linux/arm64 \
+            --tag ndubuoke/auth:latest \
             --push .
 
-      # Pull the image back for verification
-      - name: Pull the Image for Verification
-        run: docker pull ndubuoke/auth:arm64
+      # Pull the image for verification
+      - name: Pull the Image for ARM64 Verification
+        run: |
+          docker pull --platform linux/arm64 ndubuoke/auth:latest
 
       # Verify the image architecture
       - name: Verify Image Platform
         run: |
-          ARCH=$(docker inspect ndubuoke/auth:arm64 --format '{{.Architecture}}')
+          ARCH=$(docker inspect ndubuoke/auth:latest --format '{{.Architecture}}')
           if [ "$ARCH" != "arm64" ]; then
             echo "Error: Image is not built for arm64 platform. Detected: $ARCH"
             exit 1
           fi
-          echo "Image successfully built for arm64 platform!"
+          echo "Image successfully built and verified for arm64 platform!"
