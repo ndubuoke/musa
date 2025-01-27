@@ -31,3 +31,13 @@ jobs:
           docker buildx build \
             --platform linux/arm64 \
             --tag determinas/auth:arm64 .
+
+      # Verify the image architecture
+      - name: Verify Image Platform
+        run: |
+          ARCH=$(docker inspect determinas/auth:arm64 --format '{{.Architecture}}')
+          if [ "$ARCH" != "arm64" ]; then
+            echo "Error: Image is not built for arm64 platform. Detected: $ARCH"
+            exit 1
+          fi
+          echo "Image successfully built for arm64 platform!"
